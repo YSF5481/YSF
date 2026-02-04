@@ -13,12 +13,7 @@ export default async function handler(req, res) {
     const webhook1 = process.env.DISCORD_WEBHOOK1;
     const webhook2 = process.env.DISCORD_WEBHOOK2;
 
-    const target = req.headers["target"] || req.query.target;
-
-    const webhook = target === "2" ? webhook2 : webhook1;
-
     try {
-        // multipart/form-data parsing
         const formidable = (await import("formidable")).default;
         const form = new formidable.IncomingForm();
         form.parse(req, async (err, fields, files) => {
@@ -26,7 +21,10 @@ export default async function handler(req, res) {
 
             const user = fields.user;
             const message = fields.message || "";
+            const target = fields.target;
             const image = files.image;
+
+            const webhook = target === "2" ? webhook2 : webhook1;
 
             const payload = { content: `📨 ${user}: ${message}` };
 
