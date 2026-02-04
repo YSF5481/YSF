@@ -84,7 +84,7 @@ body,html{
 <body>
 
 <video class="bg-video" autoplay muted loop>
-    <source src="bg.mp4" type="video/mp4">
+    <source src="foto/arkaplanvdo.mp4" type="video/mp4">
 </video>
 
 <div class="wrapper">
@@ -111,27 +111,25 @@ if(!user){
         user + " olarak mesaj gönder";
 }
 
-function send(){
-    let message = document.getElementById("msg").value.trim();
+async function send(){
+  let message = document.getElementById("msg").value.trim();
 
-    if(message===""){
-        document.getElementById("info").innerText = "Boş mesaj gönderemezsin!";
-        return;
-    }
+  if(message === ""){
+    document.getElementById("info").innerText = "Mesaj boş olamaz!";
+    return;
+  }
 
-    // Şimdilik tarayıcıya kaydediyoruz (backend yokken)
-    let all = JSON.parse(localStorage.getItem("messages")) || [];
+  await fetch("/api/send", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      user: user,
+      message: message
+    })
+  });
 
-    all.push({
-        user: user,
-        text: message,
-        time: new Date().toLocaleString()
-    });
-
-    localStorage.setItem("messages", JSON.stringify(all));
-
-    document.getElementById("msg").value="";
-    document.getElementById("info").innerText="Mesaj gönderildi ✅";
+  document.getElementById("msg").value = "";
+  document.getElementById("info").innerText = "Discord'a gönderildi 🚀";
 }
 </script>
 
