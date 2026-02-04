@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sekmeler</title>
+
+<style>
+body,html{
+    margin:0;
+    width:100%;
+    height:100%;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow:hidden;
+}
+
+.bg-video{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:-1;
+}
+
+.wrapper{
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card{
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(12px);
+    border-radius:20px;
+    padding:40px;
+    width:360px;
+    text-align:center;
+    color:white;
+    box-shadow:0 20px 60px rgba(0,0,0,0.6);
+}
+
+.card h2{
+    margin-bottom:20px;
+}
+
+.card a{
+    display:block;
+    margin:12px 0;
+    padding:12px;
+    border-radius:8px;
+    background:#1e88e5;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.card a:hover{
+    background:#0d47a1;
+}
+</style>
+</head>
+
+<body>
+
+<video class="bg-video" autoplay muted loop>
+    <source src="foto/arkaplanvdo.mp4" type="video/mp4">
+</video>
+
+<div class="wrapper">
+<div class="card">
+
+    <h2>Sekmeler</h2>
+
+    <a href="anasayfa.html">Ana Sayfa</a>
+    <a href="#">Projelerim</a>
+    <a href="mesaj.html">Mesaj Gönder</a>
+    <a href="#">İletişim</a>
+
+</div>
+</div>
+
+</body>
+</html>
