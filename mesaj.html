@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mesaj ve Resim Gönder</title>
+<title>Mesaj Gönder</title>
 
 <style>
 body,html{
@@ -47,13 +47,10 @@ body,html{
     margin-bottom:15px;
 }
 
-.card select, .card textarea, .card input[type="file"]{
+.card select, .card textarea{
     width:100%;
     margin-bottom:15px;
     font-size:15px;
-}
-
-.card select, .card input[type="file"]{
     padding:10px;
     border-radius:8px;
     border:none;
@@ -61,9 +58,6 @@ body,html{
 
 .card textarea{
     height:120px;
-    border-radius:10px;
-    border:none;
-    padding:12px;
     resize:none;
 }
 
@@ -93,7 +87,7 @@ body,html{
 <body>
 
 <video class="bg-video" autoplay muted loop>
-    <source src="foto/arkaplanvdo.mp4" type="video/mp4">
+    <source src="bg.mp4" type="video/mp4">
 </video>
 
 <div class="wrapper">
@@ -102,13 +96,11 @@ body,html{
     <h2 id="userTitle"></h2>
 
     <select id="targetUser">
-        <option value="1">YSF</option>
-        <option value="2">Sedef</option>
+        <option value="1">Kullanıcı 1 (Ben)</option>
+        <option value="2">Kullanıcı 2 (Kuzen)</option>
     </select>
 
     <textarea id="msg" placeholder="Mesajını yaz..."></textarea>
-
-    <input type="file" id="imageFile" accept="image/*">
 
     <button onclick="send()">Gönder</button>
 
@@ -124,16 +116,15 @@ if(!user){
     window.location.href="index.html";
 }else{
     document.getElementById("userTitle").innerText =
-        user + " olarak mesaj ve resim gönder";
+        user + " olarak mesaj gönder";
 }
 
 async function send(){
     const message = document.getElementById("msg").value.trim();
-    const fileInput = document.getElementById("imageFile");
     const target = document.getElementById("targetUser").value;
 
-    if(!message && fileInput.files.length === 0){
-        document.getElementById("info").innerText = "Mesaj veya resim gerekli!";
+    if(!message){
+        document.getElementById("info").innerText = "Mesaj gerekli!";
         return;
     }
 
@@ -141,9 +132,6 @@ async function send(){
     formData.append("user", user);
     formData.append("message", message);
     formData.append("target", target);
-    if(fileInput.files.length > 0){
-        formData.append("image", fileInput.files[0]);
-    }
 
     const res = await fetch("/api/send", {
         method: "POST",
@@ -152,8 +140,7 @@ async function send(){
 
     if(res.ok){
         document.getElementById("msg").value = "";
-        fileInput.value = "";
-        document.getElementById("info").innerText = "Discord'a gönderildi ";
+        document.getElementById("info").innerText = "Discord'a gönderildi 🚀";
     } else {
         document.getElementById("info").innerText = "Hata oluştu!";
     }
