@@ -1,5 +1,7 @@
 import FormData from "form-data";
 import fetch from "node-fetch";
+import formidable from "formidable";
+import fs from "fs/promises";
 
 export const config = {
     api: {
@@ -13,12 +15,15 @@ export default async function handler(req, res) {
     const webhook1 = process.env.DISCORD_WEBHOOK1;
     const webhook2 = process.env.DISCORD_WEBHOOK2;
 
-    try {
-        const formidable = (await import("formidable")).default;
-        const form = new formidable.IncomingForm();
-        form.parse(req, async (err, fields, files) => {
-            if(err) return res.status(500).json({error: err.message});
+    const form = new formidable.IncomingForm();
 
+    form.parse(req, async (err, fields, files) => {
+        if(err) {
+            console.error("Formidable parse error:", err);
+            return res.status(500).json({error: "Form parse error"});
+        }
+
+        try {
             const user = fields.user;
             const message = fields.message || "";
             const target = fields.target;
@@ -27,22 +32,25 @@ export default async function handler(req, res) {
             const webhook = target === "2" ? webhook2 : webhook1;
 
             const payload = { content: `📨 ${user}: ${message}` };
-
             const formData = new FormData();
             formData.append("payload_json", JSON.stringify(payload));
 
             if(image){
-                const fs = (await import("fs")).promises;
                 const data = await fs.readFile(image.filepath);
                 formData.append("file", data, image.originalFilename);
             }
 
-            await fetch(webhook, { method: "POST", body: formData });
-            res.status(200).json({ success: true });
-        });
+            const resp = await fetch(webhook, { method: "POST", body: formData });
 
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, error: err.message });
-    }
+            if(!resp.ok){
+                console.error("Discord fetch error:", resp.status, await resp.text());
+                return res.status(500).json({error: "Discord fetch failed"});
+            }
+
+            return res.status(200).json({ success: true });
+        } catch(err) {
+            console.error("Backend error:", err);
+            return res.status(500).json({error: err.message});
+        }
+    });
 }
