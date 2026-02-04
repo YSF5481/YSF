@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ana Sayfa</title>
+
+<style>
+body,html{
+    margin:0;
+    width:100%;
+    height:100%;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow:hidden;
+}
+
+.bg-video{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:-1;
+}
+
+.wrapper{
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card{
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(12px);
+    border-radius:20px;
+    padding:45px;
+    max-width:600px;
+    text-align:center;
+    color:white;
+    box-shadow:0 20px 60px rgba(0,0,0,0.6);
+}
+
+.pixel-art{
+    width:160px;
+    image-rendering: pixelated;
+    animation: float 3s ease-in-out infinite;
+    margin-bottom:20px;
+}
+
+@keyframes float{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-30px);}
+    100%{transform:translateY(0);}
+}
+
+h1{
+    font-size:34px;
+    margin-bottom:12px;
+}
+
+p{
+    font-size:18px;
+    line-height:1.6;
+}
+
+.go{
+    display:inline-block;
+    margin-top:20px;
+    color:#1e88e5;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+.go:hover{
+    text-decoration:underline;
+}
+</style>
+</head>
+
+<body>
+
+<video class="bg-video" autoplay muted loop>
+    <source src="foto/arkaplanvdo.mp4" type="video/mp4">
+</video>
+
+<div class="wrapper">
+<div class="card">
+
+    <img src="foto/ysfart.png" class="pixel-art">
+
+    <h1 id="welcome"></h1>
+
+    <p>
+        Bilgisayar Programcılığı öğrencisiyim.  
+        Oyun geliştirme ve modern web projeleri üzerine çalışıyorum.  
+        Burası benim kişisel portföy sitem.
+    </p>
+
+    <a href="sayfalar.html" class="go">Ana sayfaya git</a>
+
+</div>
+</div>
+
+<script>
+let user = localStorage.getItem("username");
+
+if(!user){
+    window.location.href="index.html";
+}else{
+    document.getElementById("welcome").innerText =
+        "Merhaba " + user + ", ben Yusuf 👋";
+}
+</script>
+
+</body>
+</html>
