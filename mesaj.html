@@ -37,7 +37,7 @@ body,html{
     backdrop-filter: blur(12px);
     border-radius:20px;
     padding:40px;
-    width:380px;
+    width:400px;
     text-align:center;
     color:white;
     box-shadow:0 20px 60px rgba(0,0,0,0.6);
@@ -47,18 +47,27 @@ body,html{
     margin-bottom:15px;
 }
 
-.card textarea{
+.card select, .card textarea{
     width:100%;
+    margin-bottom:15px;
+    font-size:15px;
+}
+
+.card select{
+    padding:10px;
+    border-radius:8px;
+    border:none;
+}
+
+.card textarea{
     height:120px;
     border-radius:10px;
     border:none;
     padding:12px;
     resize:none;
-    font-size:15px;
 }
 
 .card button{
-    margin-top:15px;
     width:100%;
     padding:12px;
     background:#1e88e5;
@@ -92,6 +101,11 @@ body,html{
 
     <h2 id="userTitle"></h2>
 
+    <select id="targetUser">
+        <option value="1">Kullanıcı 1 (Ben)</option>
+        <option value="2">Kullanıcı 2 (Kuzen)</option>
+    </select>
+
     <textarea id="msg" placeholder="Mesajını yaz..."></textarea>
 
     <button onclick="send()">Gönder</button>
@@ -112,24 +126,26 @@ if(!user){
 }
 
 async function send(){
-  let message = document.getElementById("msg").value.trim();
+    let message = document.getElementById("msg").value.trim();
+    if(message === ""){
+        document.getElementById("info").innerText = "Mesaj boş olamaz!";
+        return;
+    }
 
-  if(message === ""){
-    document.getElementById("info").innerText = "Mesaj boş olamaz!";
-    return;
-  }
+    const target = document.getElementById("targetUser").value;
 
-  await fetch("/api/send", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({
-      user: user,
-      message: message
-    })
-  });
+    await fetch("/api/send", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({
+            user: user,
+            message: message,
+            target: target
+        })
+    });
 
-  document.getElementById("msg").value = "";
-  document.getElementById("info").innerText = "Discord'a gönderildi 🚀";
+    document.getElementById("msg").value = "";
+    document.getElementById("info").innerText = "Discord'a gönderildi 🚀";
 }
 </script>
 
